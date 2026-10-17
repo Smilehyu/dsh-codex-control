@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, readFile, writeFile, symlink } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, writeFile, symlink, realpath } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
@@ -12,7 +12,10 @@ import { FakeAdapter } from './helpers.js';
 
 async function fixture(t) {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-control-'));
-  const root = join(directory, 'workspace'); await mkdir(root);
+  const requestedRoot = join(directory, 'workspace'); await mkdir(requestedRoot);
+  // Production startBridge canonicalizes roots before constructing Controller.
+  // Windows runners can expose an 8.3 TEMP alias (for example RUNNER~1).
+  const root = await realpath(requestedRoot);
   const adapter = new FakeAdapter(); const store = new Store(join(directory, 'data')); await store.load();
   const controller = new Controller(store, adapter, [root]);
   t.after(() => controller.close());
