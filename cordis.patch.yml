@@ -1,0 +1,5 @@
+# Configure allowedRoots in the profile patch before enabling this layer.
+- insert:
+    - id: codex-control
+      name: dsh-codex-control
+      disabled: true

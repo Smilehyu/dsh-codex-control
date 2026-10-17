@@ -1,0 +1,9 @@
+# Replace the path with your checkout location. No credential belongs here.
+[mcp_servers.dsh_control]
+command = "node"
+args = ['D:\Tools\dsh-codex-control\bin\mcp.js']
+tool_timeout_sec = 45
+
+# Only needed if using a non-default dataDir:
+#[mcp_servers.dsh_control.env]
+#DSH_CONTROL_CONNECTION_FILE = 'D:\Private\dsh-control-data\connection.json'
